@@ -1,0 +1,27 @@
+{
+  "name": "jem_inventory",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/samrstudio/JEM_Inventory.git",
+  "author": "Eric Mitchell <ericmitchell42@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "serverless-http": "^2.7.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "serverless": "^2.30.3",
+    "standard": "^16.0.3"
+  },
+  "standard": {
+    "ignore": [
+      "/tests/",
+      "/node_modules/"
+    ]
+  }
+}
