@@ -1,0 +1,39 @@
+service: jementory-api
+
+provider:
+ name: aws
+ runtime: nodejs14.x
+ stage: dev
+ region: us-east-1
+
+functions:
+ server:
+   handler: lambda.server
+   timeout: 30
+   events:
+     - http: ANY /
+     - http: 'ANY {proxy+}'
+  
+resources:
+  Resources:
+    itemTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PROVISIONED
+        KeySchema: 
+          - KeySchema
+        LocalSecondaryIndexes: 
+          - LocalSecondaryIndex
+        PointInTimeRecoverySpecification: 
+          PointInTimeRecoverySpecification
+        ProvisionedThroughput: 
+          ProvisionedThroughput
+        SSESpecification: 
+          SSESpecification
+        StreamSpecification: 
+          StreamSpecification
+        TableName: String
+        Tags: 
+          - Tag
+        TimeToLiveSpecification: 
+          TimeToLiveSpecification
