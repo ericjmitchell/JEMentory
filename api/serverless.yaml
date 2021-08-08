@@ -1,10 +1,30 @@
 service: jementory-api
 
 provider:
- name: aws
- runtime: nodejs14.x
- stage: ${opt:stage, "dev"}
- region: ${opt:stage, "us-west-2"}
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, "dev"}
+  region: ${opt:stage, "us-west-2"}
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 's3:ListBucket'
+          Resource:
+            Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Ref: ServerlessDeploymentBucket
+        - Effect: 'Allow'
+          Action:
+            - 's3:PutObject'
+          Resource:
+            Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Ref: ServerlessDeploymentBucket
+                - '/*'
 
 functions:
  server:
