@@ -1,5 +1,5 @@
 const addUser = (req, res, next) => {
-  res.user = 'bob'
+  res.locals.user = { name: 'bob', family: '1' }
 
   next()
 }

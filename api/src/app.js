@@ -1,5 +1,7 @@
 const express = require('express')
 const cors = require('cors')
+const { addUser } = require('./middleware/users')
+const { addDBInstance } = require('./middleware/dbinstance')
 
 const router = require('./routes')
 
@@ -9,6 +11,8 @@ const server = express()
 server.use(cors())
 server.use(express.urlencoded({ extended: true, strict: false }))
 server.use(express.json())
+server.use(addUser)
+server.use(addDBInstance)
 server.use(router)
 
 server.use(errorHandler.notFound)

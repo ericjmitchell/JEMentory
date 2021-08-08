@@ -1,27 +1,29 @@
-const getItemDS = async (id) => {
-  return null
+const {
+  getItemDB,
+  getAllItemsDB,
+  saveItemDB,
+  deleteItemDB
+} = require('./db/items')
+
+const getItemDS = async (db, user, id) => {
+  return getItemDB(db, user, id)
 }
 
-const getAllItemsDS = async () => {
-  return []
+const getAllItemsDS = async (db, user) => {
+  return getAllItemsDB(db, user)
 }
 
-const getAllItemsInContainerDS = async (containerId) => {
-  return []
+const saveItemDS = async (db, user, saveItem) => {
+  return saveItemDB(db, user, saveItem)
 }
 
-const saveItemDS = async (saveItem) => {
-  return null
-}
-
-const deleteItemDS = async (id) => {
-  return null
+const deleteItemDS = async (db, user, id) => {
+  return deleteItemDB(db, user, id)
 }
 
 module.exports = {
   getItemDS,
   getAllItemsDS,
-  getAllItemsInContainerDS,
   saveItemDS,
   deleteItemDS
 }
