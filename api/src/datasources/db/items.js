@@ -33,9 +33,10 @@ const selectFields = [
 
 const getItemDB = async (db, user, id) => {
   const item = await db
+  .schema(schema)
     .table(tableName)
     .return_consumed_capacity('NONE')
-    .schema(schema)
+    .select(selectFields)
     .where('PK').eq(getPK(user))
     .where('SK').eq(getSK(id))
     .consistent_read()
@@ -46,9 +47,9 @@ const getItemDB = async (db, user, id) => {
 
 const getAllItemsDB = async (db, user) => {
   const items = await db
+  .schema(schema)
     .table(tableName)
     .return_consumed_capacity('NONE')
-    .schema(schema)
     .select(selectFields)
     .where('PK').eq(getPK(user))
     .where('SK').begins_with(skPrefix)
@@ -61,10 +62,10 @@ const getAllItemsDB = async (db, user) => {
 
 const saveItemDB = async (db, user, saveItem) => {
   await db
+  .schema(schema)
     .table(tableName)
     .return_consumed_capacity('NONE')
-    .schema(schema)
-    .return(DynamoDB.NONE)
+    .return(db.NONE)
     .insert_or_update({
       PK: getPK(user),
       SK: getSK(saveItem.id),
@@ -72,12 +73,13 @@ const saveItemDB = async (db, user, saveItem) => {
     })
 }
 
-const deleteItemDB = (db, user, id) => {
+const deleteItemDB = async (db, user, id) => {
   await db
+  .schema(schema)
 		.table(tableName)
 		.where('PK').eq( getPK(user) )
 		.where('SK').eq( getSK(id) )
-		.return(DynamoDB.NONE)
+		.return(db.NONE)
 		.delete();
 }
 
