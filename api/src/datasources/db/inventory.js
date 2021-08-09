@@ -1,5 +1,4 @@
 const tableName = 'inventory'
-const pkPrefix = 'FAMILY'
 
 const schema = [
   {
@@ -17,12 +16,15 @@ const schema = [
   },
 ]
 
-const getPK = (user) => {
-  return `${pkPrefix}:${user.familyId}`
+const dbStart = (db) => {
+  return db
+    .schema(schema)
+    .table(tableName)
+    .return_consumed_capacity('NONE')
 }
 
 module.exports = {
   tableName,
   schema,
-  getPK,
+  dbStart,
 }

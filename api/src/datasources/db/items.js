@@ -1,4 +1,4 @@
-const { tableName, schema, getPK } = require('./inventory')
+const { dbStart } = require('./inventory')
 
 // id: String,
 // name: String,
@@ -11,6 +11,11 @@ const { tableName, schema, getPK } = require('./inventory')
 // purchaseDate: Date,
 // store: String,
 // tax: Bool
+
+const pkPrefix = 'FAMILY'
+const getPK = (user) => {
+  return `${pkPrefix}:${user.familyId}`
+}
 
 const skPrefix = 'ITEM'
 const getSK = (id) => {
@@ -32,10 +37,7 @@ const selectFields = [
 ]
 
 const getItemDB = async (db, user, id) => {
-  const item = await db
-  .schema(schema)
-    .table(tableName)
-    .return_consumed_capacity('NONE')
+  const item = await dbStart(db)
     .select(selectFields)
     .where('PK').eq(getPK(user))
     .where('SK').eq(getSK(id))
@@ -46,10 +48,7 @@ const getItemDB = async (db, user, id) => {
 }
 
 const getAllItemsDB = async (db, user) => {
-  const items = await db
-  .schema(schema)
-    .table(tableName)
-    .return_consumed_capacity('NONE')
+  const items = await dbStart(db)
     .select(selectFields)
     .where('PK').eq(getPK(user))
     .where('SK').begins_with(skPrefix)
@@ -61,10 +60,7 @@ const getAllItemsDB = async (db, user) => {
 }
 
 const saveItemDB = async (db, user, saveItem) => {
-  await db
-  .schema(schema)
-    .table(tableName)
-    .return_consumed_capacity('NONE')
+  await dbStart(db)
     .return(db.NONE)
     .insert_or_update({
       PK: getPK(user),
@@ -74,9 +70,7 @@ const saveItemDB = async (db, user, saveItem) => {
 }
 
 const deleteItemDB = async (db, user, id) => {
-  await db
-  .schema(schema)
-		.table(tableName)
+  await dbStart(db)
 		.where('PK').eq( getPK(user) )
 		.where('SK').eq( getSK(id) )
 		.return(db.NONE)
