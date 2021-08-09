@@ -5,23 +5,40 @@ const {
   deleteUserDB
 } = require('./db/users')
 
-const getUserDS = async (db, id) => {
-  return getUserDB(db, id)
+const authenticate = async (email, password) => {
+  const user = await getUserDB(db, email)
+  if (user && bcrypt.compareSync(password, user.hash)) {
+    const token = jwt.sign({ sub: user.email }, process.env.secret, { expiresIn: '7d' })
+    delete user.hash
+    return {
+      user,
+      token
+    }
+  }
+}
+
+const getUserDS = async (db, email) => {
+  return getUserDB(db, email)
 }
 
 const getAllUsersDS = async (db) => {
   return getAllUsersDB(db)
 }
 
-const saveUserDS = async (db, saveUser) => {
+const saveUserDS = async (db, saveUser) => {// hash password
+  if (saveUser.password) {
+    saveUser.hash = bcrypt.hashSync(saveUser.password, 10)
+    delete saveUser.password
+  }
   return saveUserDB(db, saveUser)
 }
 
-const deleteUserDS = async (db, id) => {
-  return deleteUserDB(db, id)
+const deleteUserDS = async (db, email) => {
+  return deleteUserDB(db, email)
 }
 
 module.exports = {
+  authenticate,
   getUserDS,
   getAllUsersDS,
   saveUserDS,

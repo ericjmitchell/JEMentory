@@ -20,11 +20,11 @@ const selectFields = [
   'role',
 ]
 
-const getUserDB = async (db, id) => {
+const getUserDB = async (db, email) => {
   const user = await dbStart(db)
     .select(selectFields)
     .where('PK').eq(getPK())
-    .where('SK').eq(getSK(id))
+    .where('SK').eq(getSK(email))
     .consistent_read()
     .get()
 
@@ -53,10 +53,10 @@ const saveUserDB = async (db, saveUser) => {
     })
 }
 
-const deleteUserDB = async (db, id) => {
+const deleteUserDB = async (db, email) => {
   await dbStart(db)
 		.where('PK').eq( getPK() )
-		.where('SK').eq( getSK(id) )
+		.where('SK').eq( getSK(email) )
 		.return(db.NONE)
 		.delete();
 }
