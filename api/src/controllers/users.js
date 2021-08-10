@@ -21,6 +21,8 @@ const getUser = async (req, res) => {
     throw new Error(`User ${userId} not found!`)
   }
 
+  delete user.hash
+
   res.json(user)
 }
 

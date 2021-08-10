@@ -48,7 +48,7 @@ const saveUserDB = async (db, saveUser) => {
     .return(db.NONE)
     .insert_or_update({
       PK: getPK(),
-      SK: getSK(saveUser.id),
+      SK: getSK(saveUser.email),
       ...saveUser
     })
 }

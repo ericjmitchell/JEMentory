@@ -6,7 +6,7 @@ const family = require('./family')
 const items = require('./items')
 
 router.use('/users', users)
-router.use('/family', family)
+router.use('/families', family)
 router.use('/items', items)
 
 module.exports = router
