@@ -11,7 +11,7 @@ const {
 const authenticateDS = async (db, email, password) => {
   const user = await getUserDB(db, email)
   if (user && bcrypt.compareSync(password, user.hash)) {
-    const token = jwt.sign({ sub: user.email }, process.env.secret, { expiresIn: '7d' })
+    const token = jwt.sign({ sub: user.email, family: user.familyId }, process.env.secret, { expiresIn: '7d' })
     delete user.hash
     return {
       user,
