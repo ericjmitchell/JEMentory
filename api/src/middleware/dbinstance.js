@@ -3,6 +3,7 @@ const DynamodbFactory = require('@awspilot/dynamodb')
 
 const addDBInstance = (req, res, next) => {
   if (process.env.LOCAL) {
+    console.log('LOCAL')
     res.locals.db = new DynamodbFactory(
       new AWS.DynamoDB({
         region: 'localhost',

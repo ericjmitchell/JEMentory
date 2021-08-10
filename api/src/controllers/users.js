@@ -1,4 +1,16 @@
-const { getUserDS, getAllUsersDS, saveUserDS, deleteUserDS } = require('../datasources/users')
+const { authenticateDS, getUserDS, getAllUsersDS, saveUserDS, deleteUserDS } = require('../datasources/users')
+
+const authenticate = async (req, res) => {
+  const { email, password } = req.body
+  const user = await authenticateDS(res.locals.db, email, password)
+
+  if (!user) {
+    res.status(400)
+    throw new Error('Username or password is incorrect')
+  }
+
+  res.json(user)
+}
 
 const getUser = async (req, res) => {
   const { userId } = req.params
@@ -34,6 +46,7 @@ const deleteUser = async (req, res) => {
 }
 
 module.exports = {
+  authenticate,
   getUser,
   getAllUsers,
   saveUser,

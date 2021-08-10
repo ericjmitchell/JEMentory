@@ -5,7 +5,7 @@ const {
   deleteUserDB
 } = require('./db/users')
 
-const authenticate = async (email, password) => {
+const authenticateDS = async (db, email, password) => {
   const user = await getUserDB(db, email)
   if (user && bcrypt.compareSync(password, user.hash)) {
     const token = jwt.sign({ sub: user.email }, process.env.secret, { expiresIn: '7d' })
@@ -38,7 +38,7 @@ const deleteUserDS = async (db, email) => {
 }
 
 module.exports = {
-  authenticate,
+  authenticateDS,
   getUserDS,
   getAllUsersDS,
   saveUserDS,

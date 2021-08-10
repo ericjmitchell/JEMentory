@@ -3,7 +3,9 @@ const router = express.Router()
 
 const asyncHandler = require('express-async-handler')
 
-const { getUser, getAllUsers, saveUser, deleteUser } = require('../controllers/users')
+const { authenticate, getUser, getAllUsers, saveUser, deleteUser } = require('../controllers/users')
+
+router.post('/authenticate', asyncHandler(authenticate))
 
 router.get('/', asyncHandler(getAllUsers))
 
