@@ -5,20 +5,20 @@ const {
   deleteItemDB
 } = require('./db/items')
 
-const getItemDS = async (db, user, id) => {
-  return getItemDB(db, user, id)
+const getItemDS = async (db, familyId, id) => {
+  return getItemDB(db, familyId, id)
 }
 
-const getAllItemsDS = async (db, user) => {
-  return getAllItemsDB(db, user)
+const getAllItemsDS = async (db, familyId) => {
+  return getAllItemsDB(db, familyId)
 }
 
-const saveItemDS = async (db, user, saveItem) => {
-  return saveItemDB(db, user, saveItem)
+const saveItemDS = async (db, familyId, saveItem) => {
+  return saveItemDB(db, familyId, saveItem)
 }
 
-const deleteItemDS = async (db, user, id) => {
-  return deleteItemDB(db, user, id)
+const deleteItemDS = async (db, familyId, id) => {
+  return deleteItemDB(db, familyId, id)
 }
 
 module.exports = {

@@ -13,8 +13,8 @@ const { dbStart } = require('./inventory')
 // tax: Bool
 
 const pkPrefix = 'FAMILY'
-const getPK = (user) => {
-  return `${pkPrefix}:${user.familyId}`
+const getPK = (familyId) => {
+  return `${pkPrefix}:${familyId}`
 }
 
 const skPrefix = 'ITEM'
@@ -36,10 +36,10 @@ const selectFields = [
   'tax'
 ]
 
-const getItemDB = async (db, user, id) => {
+const getItemDB = async (db, familyId, id) => {
   const item = await dbStart(db)
     .select(selectFields)
-    .where('PK').eq(getPK(user))
+    .where('PK').eq(getPK(familyId))
     .where('SK').eq(getSK(id))
     .consistent_read()
     .get()
@@ -47,10 +47,10 @@ const getItemDB = async (db, user, id) => {
   return item
 }
 
-const getAllItemsDB = async (db, user) => {
+const getAllItemsDB = async (db, familyId) => {
   const items = await dbStart(db)
     .select(selectFields)
-    .where('PK').eq(getPK(user))
+    .where('PK').eq(getPK(familyId))
     .where('SK').begins_with(skPrefix)
     .limit(100)
     .consistent_read()
@@ -59,19 +59,19 @@ const getAllItemsDB = async (db, user) => {
   return items
 }
 
-const saveItemDB = async (db, user, saveItem) => {
+const saveItemDB = async (db, familyId, saveItem) => {
   await dbStart(db)
     .return(db.NONE)
     .insert_or_update({
-      PK: getPK(user),
+      PK: getPK(familyId),
       SK: getSK(saveItem.id),
       ...saveItem
     })
 }
 
-const deleteItemDB = async (db, user, id) => {
+const deleteItemDB = async (db, familyId, id) => {
   await dbStart(db)
-		.where('PK').eq( getPK(user) )
+		.where('PK').eq( getPK(familyId) )
 		.where('SK').eq( getSK(id) )
 		.return(db.NONE)
 		.delete();
