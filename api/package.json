@@ -1,5 +1,5 @@
 {
-  "name": "jem_inventory",
+  "name": "jementory-api",
   "version": "1.0.0",
   "main": "server.js",
   "repository": "https://github.com/samrstudio/JEM_Inventory.git",
