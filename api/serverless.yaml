@@ -5,52 +5,48 @@ provider:
   runtime: nodejs14.x
   stage: ${opt:stage, "dev"}
   region: ${opt:stage, "us-west-2"}
+  useDotenv: false
+  configValidationMode: error
+  lambdaHashingVersion: "20201221"
+  environment:
+    secret: ivegotalovelybunchofcoconuts
   iam:
     role:
       statements:
-        - Effect: 'Allow'
+        - Effect: Allow
           Action:
-            - 's3:ListBucket'
-          Resource:
-            Fn::Join:
-              - ''
-              - - 'arn:aws:s3:::'
-                - Ref: ServerlessDeploymentBucket
-        - Effect: 'Allow'
-          Action:
-            - 's3:PutObject'
-          Resource:
-            Fn::Join:
-              - ''
-              - - 'arn:aws:s3:::'
-                - Ref: ServerlessDeploymentBucket
-                - '/*'
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+          Resource: 
+            Fn::GetAtt: [ inventoryTable, Arn ]
 
 functions:
- server:
-   handler: lambda.server
-   timeout: 30
-   events:
-     - http: ANY /
-     - http: 'ANY {proxy+}'
-  
+  server:
+    handler: lambda.server
+    timeout: 30
+    events:
+      - http: ANY /
+      - http: "ANY {proxy+}"
+
 resources:
   Resources:
     inventoryTable:
       Type: AWS::DynamoDB::Table
       Properties:
         BillingMode: PROVISIONED
-        AttributeDefinitions: 
+        AttributeDefinitions:
           - AttributeName: "PK"
             AttributeType: "S"
           - AttributeName: "SK"
             AttributeType: "S"
-        KeySchema: 
+        KeySchema:
           - AttributeName: "PK"
             KeyType: "HASH"
           - AttributeName: "SK"
             KeyType: "RANGE"
-        ProvisionedThroughput: 
+        ProvisionedThroughput:
           ReadCapacityUnits: 10
           WriteCapacityUnits: 10
         TableName: inventory
