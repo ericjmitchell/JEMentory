@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import peopleReducer from './people/peopleSlice'
-import personReducer from './people/personSlice'
-import congressReducer from './people/congressSlice'
+import userReducer from './account/userSlice'
+import familyReducer from './account/familySlice'
+import itemsReducer from './items/itemsSlice'
+import itemReducer from './items/itemSlice'
 
 export default configureStore({
   reducer: {
-    people: peopleReducer,
-    person: personReducer,
-    congress: congressReducer
+    user: userReducer,
+    family: familyReducer,
+    items: itemsReducer,
+    item: itemReducer
   }
 })

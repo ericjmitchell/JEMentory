@@ -1,8 +1,8 @@
-const { authenticateDS, getUserDS, getAllUsersDS, saveUserDS, deleteUserDS } = require('../datasources/users')
+const { loginDS, getUserDS, getAllUsersDS, saveUserDS, deleteUserDS } = require('../datasources/users')
 
-const authenticate = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body
-  const user = await authenticateDS(res.locals.db, email, password)
+  const user = await loginDS(res.locals.db, email, password)
 
   if (!user) {
     res.status(400)
@@ -13,12 +13,11 @@ const authenticate = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-  const { userId } = req.params
-  const user = await getUserDS(res.locals.db, userId)
+  const user = await getUserDS(res.locals.db, req.user.sub)
 
   if (!user) {
     res.status(404)
-    throw new Error(`User ${userId} not found!`)
+    throw new Error(`User ${req.user.sub} not found!`)
   }
 
   delete user.hash
@@ -41,14 +40,13 @@ const saveUser = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-  const { userId } = req.params
-  const result = await deleteUserDS(res.locals.db, userId)
+  const result = await deleteUserDS(res.locals.db, req.user.sub)
 
   res.json(result)
 }
 
 module.exports = {
-  authenticate,
+  login,
   getUser,
   getAllUsers,
   saveUser,
