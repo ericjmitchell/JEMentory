@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const congressSlice = createSlice({
-  name: 'congress',
+const familySlice = createSlice({
+  name: 'family',
   initialState: "",
   reducers: {
-    updateCongress: (state, action) => {
+    updateFamily: (state, action) => {
       return action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { updateCongress } = congressSlice.actions
+export const { updateFamily } = familySlice.actions
 
-export default congressSlice.reducer
+export default familySlice.reducer

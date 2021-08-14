@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const personSlice = createSlice({
-  name: 'person',
+const itemSlice = createSlice({
+  name: 'item',
   initialState: {},
   reducers: {
-    updatePerson: (state, action) => {
+    updateItem: (state, action) => {
       console.log(action)
       return action.payload
     }
@@ -12,6 +12,6 @@ const personSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updatePerson } = personSlice.actions
+export const { updateItem } = itemSlice.actions
 
-export default personSlice.reducer
+export default itemSlice.reducer
