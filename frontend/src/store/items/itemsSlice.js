@@ -1,28 +1,73 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { SERVER_URL } from '../../config/config.json'
 
-const itemsSlice = createSlice({
-  name: 'items',
-  initialState: [],
-  reducers: {
-    updateItems: (state, action) => {
-      // let count = 0
+export const fetchItems = createAsyncThunk(
+  'items/fetchItems',
+  async ({ token }, thunkAPI) => {
+    try {
+      const response = await fetch(
+        `${SERVER_URL}/items`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-      // if (action.payload) {
-      //   const items = action.payload.map(item => {
-      //     item.id = count++
-      //     item.shortParty = item.party[0]
-      //     return item
-      //   })
+      const data = await response.json();
 
-      //   return items
-      // }
-
-      return action.payload
+      if (response.status === 200) {
+        return { ...data };
+      } else {
+        return thunkAPI.rejectWithValue(data);
+      }
+    } catch (e) {
+      console.log('Error', e.response.data);
+      return thunkAPI.rejectWithValue(e.response.data);
     }
   }
-})
+);
 
-// Action creators are generated for each case reducer function
-export const { updateItems } = itemsSlice.actions
+export const itemsSlice = createSlice({
+  name: 'items',
+  initialState: {
+    list: [],
 
-export default itemsSlice.reducer
+    isFetching: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: '',
+  },
+  reducers: {
+    clearState: (state) => {
+      state.isError = false;
+      state.isSuccess = false;
+      state.isFetching = false;
+
+      return state;
+    },
+  },
+  extraReducers: {
+    [fetchItems.pending]: (state) => {
+      state.isFetching = true;
+    },
+    [fetchItems.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      
+      state.items = payload.items;
+    },
+    [fetchItems.rejected]: (state) => {
+      console.log('fetchItems');
+      state.isFetching = false;
+      state.isError = true;
+    },
+  },
+});
+
+export const { clearState } = itemsSlice.actions;
+
+export const itemsSelector = (state) => state.items;

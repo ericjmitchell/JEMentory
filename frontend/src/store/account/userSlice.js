@@ -6,7 +6,7 @@ export const loginUser = createAsyncThunk(
   async ({ email, password }, thunkAPI) => {
     try {
       const response = await fetch(
-        `${SERVER_URL}/users/authenticate`,
+        `${SERVER_URL}/users/login`,
         {
           method: 'POST',
           headers: {
@@ -21,6 +21,7 @@ export const loginUser = createAsyncThunk(
       );
 
       const data = await response.json();
+      
       if (response.status === 200) {
         localStorage.setItem('token', data.token);
         return data;
@@ -34,12 +35,12 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const fetchUserBytoken = createAsyncThunk(
-  'users/fetchUserByToken',
+export const fetchUser = createAsyncThunk(
+  'users/fetchUser',
   async ({ token }, thunkAPI) => {
     try {
       const response = await fetch(
-        'https://mock-user-auth-server.herokuapp.com/api/v1/users',
+        `${SERVER_URL}/users`,
         {
           method: 'GET',
           headers: {
@@ -49,8 +50,8 @@ export const fetchUserBytoken = createAsyncThunk(
           },
         }
       );
-      let data = await response.json();
-      console.log('data', data, response.status);
+
+      const data = await response.json();
 
       if (response.status === 200) {
         return { ...data };
@@ -67,8 +68,8 @@ export const fetchUserBytoken = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     isFetching: false,
     isSuccess: false,
@@ -87,9 +88,11 @@ export const userSlice = createSlice({
   extraReducers: {
     [loginUser.fulfilled]: (state, { payload }) => {
       state.email = payload.email;
-      state.firstname = payload.name;
+      state.firstName = payload.firstName;
+      state.lastName = payload.lastName;
       state.isFetching = false;
       state.isSuccess = true;
+
       return state;
     },
     [loginUser.rejected]: (state, { payload }) => {
@@ -101,18 +104,19 @@ export const userSlice = createSlice({
     [loginUser.pending]: (state) => {
       state.isFetching = true;
     },
-    [fetchUserBytoken.pending]: (state) => {
+    [fetchUser.pending]: (state) => {
       state.isFetching = true;
     },
-    [fetchUserBytoken.fulfilled]: (state, { payload }) => {
+    [fetchUser.fulfilled]: (state, { payload }) => {
       state.isFetching = false;
       state.isSuccess = true;
 
       state.email = payload.email;
-      state.username = payload.name;
+      state.firstName = payload.firstName;
+      state.lastName = payload.lastName;
     },
-    [fetchUserBytoken.rejected]: (state) => {
-      console.log('fetchUserBytoken');
+    [fetchUser.rejected]: (state) => {
+      console.log('fetchUser');
       state.isFetching = false;
       state.isError = true;
     },
