@@ -48,7 +48,7 @@ export const saveItem = createAsyncThunk(
         }
       );
 
-      //const data = await response.json();
+      const data = await response.json();
 
       if (response.status === 200) {
         return {};
@@ -78,7 +78,7 @@ export const deleteItem = createAsyncThunk(
         }
       );
 
-      //const data = await response.json();
+      const data = await response.json();
 
       if (response.status === 200) {
         return {};
@@ -146,7 +146,7 @@ export const itemSlice = createSlice({
       state.isFetching = false;
       state.isError = true;
     },
-    
+
     [saveItem.pending]: (state) => {
       state.isFetching = true;
     },
