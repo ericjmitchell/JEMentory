@@ -9,7 +9,9 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.15",
     "@chakra-ui/react": "^1.0.0",
+    "@choc-ui/logo": "^1.0.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@reduxjs/toolkit": "^1.6.1",
