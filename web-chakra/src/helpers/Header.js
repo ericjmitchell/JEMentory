@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { userSelector, fetchUser, clearState } from '../features/User/UserSlice'
 import Loader from 'react-loader-spinner'
 import { useHistory } from 'react-router-dom'
+import { ColorModeSwitcher } from './ColorModeSwitcher'
 
 const Header = () => {
   const history = useHistory()
@@ -44,6 +45,7 @@ const Header = () => {
           >
             Log Out
           </button>
+          <ColorModeSwitcher />
         </nav>
       )}
     </header>

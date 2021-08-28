@@ -75,15 +75,20 @@ export const userSlice = createSlice({
     isSuccess: false,
     isError: false,
     errorMessage: '',
+    showPassword: false,
   },
   reducers: {
     clearState: (state) => {
       state.isError = false;
       state.isSuccess = false;
       state.isFetching = false;
+      state.showPassword = false;
 
       return state;
     },
+    setShowPassword: (state, action) => {
+      state.showPassword = action.payload;
+    }
   },
   extraReducers: {
     [loginUser.fulfilled]: (state, { payload }) => {
@@ -123,6 +128,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { clearState } = userSlice.actions;
+export const { clearState, setShowPassword } = userSlice.actions;
 
 export const userSelector = (state) => state.user;

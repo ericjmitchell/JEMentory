@@ -1,135 +1,139 @@
-import React, { Fragment, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, userSelector, clearState } from './UserSlice';
-import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { useSelector, useDispatch } from 'react-redux'
+import { loginUser, userSelector, clearState, setShowPassword } from './UserSlice'
+import toast from 'react-hot-toast'
+import { useHistory } from 'react-router-dom'
+import {
+  Flex,
+  Heading,
+  Input,
+  Button,
+  InputGroup,
+  Stack,
+  InputLeftElement,
+  chakra,
+  Box,
+  Avatar,
+  FormControl,
+  InputRightElement
+} from "@chakra-ui/react"
+import { FaUserAlt, FaLock } from "react-icons/fa"
+
+const CFaUserAlt = chakra(FaUserAlt)
+const CFaLock = chakra(FaLock)
 
 const Login = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const { register, handleSubmit } = useForm();
-  const { isFetching, isSuccess, isError, errorMessage } = useSelector(
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const { register, handleSubmit } = useForm()
+  const { isFetching, isSuccess, isError, errorMessage, showPassword } = useSelector(
     userSelector
-  );
+  )
   const onSubmit = (data) => {
-    dispatch(loginUser(data));
-  };
+    dispatch(loginUser(data))
+  }
+
+  const handleShowClick = () => {
+    dispatch(setShowPassword(!showPassword))
+  }
 
   useEffect(() => {
     return () => {
-      dispatch(clearState());
-    };
-  }, [dispatch]);
+      dispatch(clearState())
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (isError) {
-      toast.error(errorMessage);
-      dispatch(clearState());
+      toast.error(errorMessage)
+      dispatch(clearState())
     }
 
     if (isSuccess) {
-      dispatch(clearState());
-      history.push('/');
+      dispatch(clearState())
+      history.push('/')
     }
-  }, [isError, isSuccess, dispatch, history, errorMessage]);
+  }, [isError, isSuccess, dispatch, history, errorMessage])
 
   return (
-    <Fragment>
-      <div>
-        <div>
-          <h2>
-            Sign in to your account
-          </h2>
-        </div>
-        <div>
-          <div>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              method="POST"
+    <Flex
+      flexDirection="column"
+      width="100wh"
+      height="100vh"
+      backgroundColor="gray.200"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Stack
+        flexDir="column"
+        mb="2"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Avatar bg="teal.500" />
+        <Heading color="teal.400">Welcome</Heading>
+        <Box minW={{ base: "90%", md: "468px" }}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Stack
+              spacing={4}
+              p="1rem"
+              backgroundColor="whiteAlpha.900"
+              boxShadow="md"
             >
-              <div>
-                <label
-                  for="email"
-                >
-                  Email address
-                </label>
-                <div>
-                  <input
-                    id="email"
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<CFaUserAlt color="gray.300" />}
+                  />
+                  <Input
                     type="email"
-                    autoComplete="email"
+                    placeholder="email address"
                     {...register('email', {
                       pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i,
                       required: true
                     })}
-                    required
                   />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  for="password"
-                >
-                  Password
-                </label>
-                <div>
-                  <input
-                    id="password"
-                    type="password"
+                </InputGroup>
+              </FormControl>
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    color="gray.300"
+                    children={<CFaLock color="gray.300" />}
+                  />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
                     {...register('password', { required: true })}
-                    autoComplete="current-password"
-                    required
                   />
-                </div>
-              </div>
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleShowClick}>
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <Button
+                isLoading={isFetching ? true : undefined}
+                borderRadius={0}
+                type="submit"
+                variant="solid"
+                colorScheme="teal"
+                width="full"
+              >
+                Login
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+      </Stack>
+    </Flex>
+  )
+}
 
-              <div>
-                <button
-                  type="submit"
-                >
-                  {isFetching ? (
-                    <svg
-                      class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                  ) : null}
-                  Sign in
-                </button>
-              </div>
-            </form>
-            <div class="mt-6">
-              <div class="relative">
-                <div class="relative flex justify-center text-sm">
-                  <span class="px-2 bg-white text-gray-500">
-                    Or <Link to="signup"> Signup</Link>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Fragment>
-  );
-};
-
-export default Login;
+export default Login
