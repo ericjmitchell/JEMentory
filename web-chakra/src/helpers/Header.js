@@ -9,9 +9,10 @@ const Header = () => {
 
   const dispatch = useDispatch()
   const { isFetching, isError } = useSelector(userSelector)
+
   useEffect(() => {
     dispatch(fetchUser({ token: localStorage.getItem('token') }))
-  }, [])
+  }, [dispatch])
 
   const { firstName, lastName } = useSelector(userSelector)
 
@@ -20,7 +21,7 @@ const Header = () => {
       dispatch(clearState())
       history.push('/login')
     }
-  }, [isError])
+  }, [isError, dispatch, history])
 
   const onLogOut = () => {
     localStorage.removeItem('token')
@@ -33,8 +34,8 @@ const Header = () => {
       {isFetching ? (
         <Loader type="Puff" color="#00BFFF" height={100} width={100} />
       ) : (
-        <nav className="container p-6 mx-auto">
-          <div className="container mx-auto">
+        <nav>
+          <div>
             JEMentory <h3>{firstName} {lastName}</h3>
           </div>
           <button
