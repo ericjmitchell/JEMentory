@@ -11,7 +11,7 @@ export const fetchItems = createAsyncThunk(
           method: 'GET',
           headers: {
             Accept: 'application/json',
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
@@ -20,7 +20,7 @@ export const fetchItems = createAsyncThunk(
       const data = await response.json();
 
       if (response.status === 200) {
-        return { ...data };
+        return data;
       } else {
         return thunkAPI.rejectWithValue(data);
       }
@@ -58,7 +58,7 @@ export const itemsSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       
-      state.items = payload.items;
+      state.list = payload;
     },
     [fetchItems.rejected]: (state) => {
       console.log('fetchItems');

@@ -71,6 +71,7 @@ export const userSlice = createSlice({
     firstName: '',
     lastName: '',
     email: '',
+    
     isFetching: false,
     isSuccess: false,
     isError: false,

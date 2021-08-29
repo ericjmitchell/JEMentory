@@ -11,7 +11,7 @@ export const fetchItem = createAsyncThunk(
           method: 'GET',
           headers: {
             Accept: 'application/json',
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
@@ -41,7 +41,7 @@ export const saveItem = createAsyncThunk(
           method: 'POST',
           headers: {
             Accept: 'application/json',
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(item)
@@ -72,7 +72,7 @@ export const deleteItem = createAsyncThunk(
           method: 'DELETE',
           headers: {
             Accept: 'application/json',
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
