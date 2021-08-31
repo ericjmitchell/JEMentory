@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const { addUser } = require('./middleware/users')
 const { addDBInstance } = require('./middleware/dbinstance')
+const jwt = require('./middleware/jwt')
 
 const router = require('./routes')
 
@@ -11,7 +12,7 @@ const server = express()
 server.use(cors())
 server.use(express.urlencoded({ extended: true, strict: false }))
 server.use(express.json())
-server.use(addUser)
+server.use(jwt())
 server.use(addDBInstance)
 server.use(router)
 

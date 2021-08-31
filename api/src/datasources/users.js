@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const {
   getUserDB,
@@ -8,10 +8,10 @@ const {
   deleteUserDB
 } = require('./db/users')
 
-const authenticateDS = async (db, email, password) => {
+const loginDS = async (db, email, password) => {
   const user = await getUserDB(db, email)
   if (user && bcrypt.compareSync(password, user.hash)) {
-    const token = jwt.sign({ sub: user.email }, process.env.secret, { expiresIn: '7d' })
+    const token = jwt.sign({ sub: user.email, family: user.familyId }, process.env.secret, { expiresIn: '7d' })
     delete user.hash
     return {
       user,
@@ -41,7 +41,7 @@ const deleteUserDS = async (db, email) => {
 }
 
 module.exports = {
-  authenticateDS,
+  loginDS,
   getUserDS,
   getAllUsersDS,
   saveUserDS,

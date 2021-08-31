@@ -2,7 +2,7 @@ const { getItemDS, getAllItemsDS, saveItemDS, deleteItemDS } = require('../datas
 
 const getItem = async (req, res) => {
   const { itemId } = req.params
-  const item = await getItemDS(res.locals.db, res.locals.user, itemId)
+  const item = await getItemDS(res.locals.db, req.user.family, itemId)
 
   if (!item) {
     res.status(404)
@@ -13,7 +13,7 @@ const getItem = async (req, res) => {
 }
 
 const getAllItems = async (req, res) => {
-  const items = await getAllItemsDS(res.locals.db, res.locals.user)
+  const items = await getAllItemsDS(res.locals.db, req.user.family)
 
   res.json(items)
 }
@@ -21,14 +21,14 @@ const getAllItems = async (req, res) => {
 const saveItem = async (req, res) => {
   const { body: item } = req
 
-  const result = await saveItemDS(res.locals.db, res.locals.user, item)
+  const result = await saveItemDS(res.locals.db, req.user.family, item)
 
   res.json(result)
 }
 
 const deleteItem = async (req, res) => {
   const { itemId } = req.params
-  const result = await deleteItemDS(res.locals.db, res.locals.user, itemId)
+  const result = await deleteItemDS(res.locals.db, req.user.family, itemId)
 
   res.json(result)
 }

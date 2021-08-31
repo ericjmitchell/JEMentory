@@ -5,10 +5,10 @@ const asyncHandler = require('express-async-handler')
 
 const { getFamily, saveFamily, deleteFamily } = require('../controllers/family')
 
-router.get('/:familyId', asyncHandler(getFamily))
+router.get('/', asyncHandler(getFamily))
 
 router.post('/', asyncHandler(saveFamily))
 
-router.delete('/:familyId', asyncHandler(deleteFamily))
+router.delete('/', asyncHandler(deleteFamily))
 
 module.exports = router
