@@ -15,7 +15,7 @@ function App() {
           <Route exact component={Login} path="/login" />
           <PrivateRoute exact component={ItemsView} path="/" />
           <PrivateRoute exact component={ItemsView} path="/items" />
-          <PrivateRoute component={ItemView} path="/item" />
+          <PrivateRoute component={ItemView} path="/items/:id" />
         </Switch>
       </Router>
     </ChakraProvider>
