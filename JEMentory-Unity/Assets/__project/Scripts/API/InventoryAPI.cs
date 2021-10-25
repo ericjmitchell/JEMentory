@@ -9,7 +9,6 @@ public class InventoryAPI : ScriptableObject
 
     public void Login(string email, string password, Action<LoginModel> callback)
     {
-        Debug.Log($"Login: {email}, {password}");
         string json = $"{{\"email\":\"{email}\",\"password\": \"{password}\"}}";
         APIHelper.instance.Post($"{baseUrl}/users/login", json, callback);
     }
@@ -22,5 +21,16 @@ public class InventoryAPI : ScriptableObject
     public void GetItems(Action<ItemModel[]> callback)
     {
         APIHelper.instance.GetList($"{baseUrl}/items", callback);
+    }
+
+    public void SaveItem(ItemModel item, Action<ItemModel> callback)
+    {
+        string json = JsonUtility.ToJson(item);
+        APIHelper.instance.Post($"{baseUrl}/items", json, callback);
+    }
+
+    public void DeleteItem(string itemId, Action<ItemModel> callback)
+    {
+        APIHelper.instance.Delete($"{baseUrl}/items/${itemId}", callback);
     }
 }

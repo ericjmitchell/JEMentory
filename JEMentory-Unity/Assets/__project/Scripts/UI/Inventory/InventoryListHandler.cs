@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,11 +14,13 @@ public class InventoryListHandler : MonoBehaviour
     private EditPanelHandler editPanel;
 
     private List<InventoryItemHandler> _itemObjects;
-    private bool _savingItem = false;
+    private List<InventoryItemHandler> _itemObjectsPool;
+    private bool _creatingItem = false;
 
     private void Start()
     {
         _itemObjects = new List<InventoryItemHandler>();
+        _itemObjectsPool = new List<InventoryItemHandler>();
         api.GetItems(GetItemsResponse);
     }
 
@@ -31,12 +34,37 @@ public class InventoryListHandler : MonoBehaviour
 
     private void AddItem(ItemModel item)
     {
-        InventoryItemHandler itemObject = Instantiate(itemPrefab, transform);
+        InventoryItemHandler itemObject;
+        if (_itemObjectsPool.Count > 0)
+        {
+            itemObject = _itemObjectsPool[0];
+            _itemObjectsPool.RemoveAt(0);
+            itemObject.gameObject.SetActive(true);
+        }
+        else
+        {
+            itemObject = Instantiate(itemPrefab, transform);
+        }
+
         itemObject.item = item;
 
         itemObject.GetComponent<Button>().onClick.AddListener(() => EditItem(item));
 
         _itemObjects.Add(itemObject);
+    }
+
+    private void RefreshItems()
+    {
+        foreach (InventoryItemHandler itemObject in _itemObjects)
+        {
+            itemObject.gameObject.SetActive(false);
+            itemObject.GetComponent<Button>().onClick.RemoveAllListeners();
+            _itemObjectsPool.Add(itemObject);
+        }
+
+        _itemObjects.Clear();
+
+        api.GetItems(GetItemsResponse);
     }
 
     private void EditItem(ItemModel item)
@@ -52,25 +80,33 @@ public class InventoryListHandler : MonoBehaviour
         item.name = "New Item";
         item.amount = 0;
 
-        _savingItem = true;
+        _creatingItem = true;
 
         EditItem(item);
     }
 
     public void OnItemSaved(ItemModel item)
     {
-        if (_savingItem)
+        if (_creatingItem)
         {
-            AddItem(item);
-            _savingItem = false;
+            _creatingItem = false;
         }
 
         editPanel.gameObject.SetActive(false);
+
+        RefreshItems();
+    }
+
+    public void OnItemDeleted(ItemModel item)
+    {
+        editPanel.gameObject.SetActive(false);
+
+        RefreshItems();
     }
 
     public void OnEditCancelled()
     {
-        _savingItem = false;
+        _creatingItem = false;
         editPanel.gameObject.SetActive(false);
     }
 }

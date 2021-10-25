@@ -21,6 +21,12 @@ public class APIHelper : MonoBehaviour
     {
         instance = this;
         DontDestroyOnLoad(this);
+
+        //Check for saved token
+        if (PlayerPrefs.HasKey("token"))
+        {
+            token = PlayerPrefs.GetString("token");
+        }
     }
 
     //private void POST(string url, string body)
@@ -33,17 +39,22 @@ public class APIHelper : MonoBehaviour
 
     public void Post<T>(string URL, string body, Action<T> callback)
     {
-        StartCoroutine(MakeRequest<T>(RequestType.POST, URL, body, callback));
+        StartCoroutine(MakeRequest(RequestType.POST, URL, body, callback));
     }
 
     public void Get<T>(string URL, Action<T> callback)
     {
-        StartCoroutine(MakeRequest<T>(RequestType.GET, URL, null, callback));
+        StartCoroutine(MakeRequest(RequestType.GET, URL, null, callback));
     }
 
     public void GetList<T>(string URL, Action<T[]> callback)
     {
-        StartCoroutine(MakeRequestList<T>(RequestType.GET, URL, null, callback));
+        StartCoroutine(MakeRequestList(RequestType.GET, URL, null, callback));
+    }
+
+    public void Delete<T>(string URL, Action<T> callback)
+    {
+        StartCoroutine(MakeRequest(RequestType.DELETE, URL, null, callback));
     }
 
     private IEnumerator MakeRequestList<T>(RequestType method, string URL, string body, Action<T[]> callback)

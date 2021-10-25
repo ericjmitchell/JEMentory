@@ -11,6 +11,14 @@ public class LoginHandler : MonoBehaviour
     [SerializeField]
     private InventoryAPI api;
 
+    private void Start()
+    {
+        if (string.IsNullOrEmpty(APIHelper.instance.token) == false)
+        {
+            SceneManager.LoadScene("Inventory");
+        }
+    }
+
     public void OnClick()
     {
         if (string.IsNullOrEmpty(emailInput.text) || string.IsNullOrEmpty(passwordInput.text))
@@ -26,6 +34,8 @@ public class LoginHandler : MonoBehaviour
     internal void LoginResponse(LoginModel loginInfo)
     {
         APIHelper.instance.token = loginInfo.token;
+        PlayerPrefs.SetString("token", loginInfo.token);
+        PlayerPrefs.Save();
 
         SceneManager.LoadScene("Inventory");
     }
