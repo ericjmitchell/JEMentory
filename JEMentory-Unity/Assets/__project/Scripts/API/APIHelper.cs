@@ -98,8 +98,15 @@ public class APIHelper : MonoBehaviour
             }
             else
             {
-                T value = JsonUtility.FromJson<T>(webRequest.downloadHandler.text);
-                callback?.Invoke(value);
+                if (string.IsNullOrEmpty(webRequest.downloadHandler?.text) == false)
+                {
+                    T value = JsonUtility.FromJson<T>(webRequest.downloadHandler.text);
+                    callback?.Invoke(value);
+                }
+                else
+                {
+                    callback?.Invoke(default);
+                }
             }
         }
         finally

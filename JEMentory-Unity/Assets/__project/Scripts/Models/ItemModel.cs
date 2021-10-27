@@ -5,7 +5,15 @@ public class ItemModel
 {
     public string id;
     public string name;
+    public string category;
     public int amount;
+    public string unit;
+    public float daysPerUnit;
+    public float lastPrice;
+    public float purchaseAmount;
+    public string purchaseDate;
+    public string store;
+    public bool tax;
 
     //public ItemModel()
     //{

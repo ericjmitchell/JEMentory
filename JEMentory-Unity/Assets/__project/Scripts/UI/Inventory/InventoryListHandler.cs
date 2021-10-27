@@ -16,6 +16,7 @@ public class InventoryListHandler : MonoBehaviour
     private List<InventoryItemHandler> _itemObjects;
     private List<InventoryItemHandler> _itemObjectsPool;
     private bool _creatingItem = false;
+    private bool _refreshing = false;
 
     private void Start()
     {
@@ -30,6 +31,8 @@ public class InventoryListHandler : MonoBehaviour
         {
             AddItem(item);
         }
+
+        _refreshing = false;
     }
 
     private void AddItem(ItemModel item)
@@ -55,6 +58,7 @@ public class InventoryListHandler : MonoBehaviour
 
     private void RefreshItems()
     {
+        _refreshing = true;
         foreach (InventoryItemHandler itemObject in _itemObjects)
         {
             itemObject.gameObject.SetActive(false);
@@ -83,6 +87,11 @@ public class InventoryListHandler : MonoBehaviour
         _creatingItem = true;
 
         EditItem(item);
+    }
+
+    public void RefreshList()
+    {
+        RefreshItems();
     }
 
     public void OnItemSaved(ItemModel item)
